@@ -65,6 +65,16 @@ public:
      * @return An autoreleased MotionStreak object.
      */
     static MotionStreak* create(float timeToFade, float minSeg, float strokeWidth, const Color3B& strokeColor, Texture2D* texture);
+	/** Creates and initializes a motion streak with fade in seconds, minimum segments, stroke's width, color, spriteFrame.
+	*
+	* @param timeToFade The fade time, in seconds.
+    * @param minSeg The minimum segments.
+    * @param strokeWidth The width of stroke.
+    * @param strokeColor The color of stroke.
+    * @param spriteFrameName The sprite frame name.
+    * @return An autoreleased MotionStreak object.
+    */
+	static MotionStreak* createWithSpriteFrameName(float timeToFade, float minSeg, float strokeWidth, const Color3B& strokeColor, const std::string& spriteFrameName);
 
     /** Color used for the tint.
      *
@@ -153,6 +163,9 @@ CC_CONSTRUCTOR_ACCESS:
     
     /** initializes a motion streak with fade in seconds, minimum segments, stroke's width, color and texture filename */
     bool initWithFade(float fade, float minSeg, float stroke, const Color3B& color, const std::string& path);
+
+	/** initializes a motion streak with fade in seconds, minimum segments, stroke's width, color and spriteFrameName  */
+	bool initWithFadeAndSpriteFrameName(float fade, float minSeg, float stroke, const Color3B& color, const std::string& spriteFrameName);
     
     /** initializes a motion streak with fade in seconds, minimum segments, stroke's width, color and texture  */
     bool initWithFade(float fade, float minSeg, float stroke, const Color3B& color, Texture2D* texture);
@@ -166,6 +179,7 @@ protected:
 
     /** texture used for the motion streak */
     Texture2D* _texture;
+	cocos2d::Rect _textureRect;
     BlendFunc _blendFunc;
     Vec2 _positionR;
 
