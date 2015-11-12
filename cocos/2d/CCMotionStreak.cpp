@@ -33,12 +33,16 @@ THE SOFTWARE.
 #include "renderer/CCRenderer.h"
 #include "renderer/CCGLProgramState.h"
 
+#include "2d/CCSpriteFrame.h"
+#include "2d/CCSpriteFrameCache.h"
+
 NS_CC_BEGIN
 
 MotionStreak::MotionStreak()
 : _fastMode(false)
 , _startingPositionInitialized(false)
 , _texture(nullptr)
+, _textureRect(0,0,1,1)
 , _blendFunc(BlendFunc::ALPHA_NON_PREMULTIPLIED)
 , _stroke(0.0f)
 , _fadeDelta(0.0f)
@@ -90,12 +94,44 @@ MotionStreak* MotionStreak::create(float fade, float minSeg, float stroke, const
     return nullptr;
 }
 
+MotionStreak* MotionStreak::createWithSpriteFrameName(float fade, float minSeg, float stroke, const Color3B& color, const std::string& spriteFrameName)
+{
+	MotionStreak *ret = new (std::nothrow) MotionStreak();
+	if (ret && ret->initWithFadeAndSpriteFrameName(fade, minSeg, stroke, color, spriteFrameName))
+	{
+		ret->autorelease();
+		return ret;
+	}
+
+	CC_SAFE_DELETE(ret);
+	return nullptr;
+}
+
 bool MotionStreak::initWithFade(float fade, float minSeg, float stroke, const Color3B& color, const std::string& path)
 {
     CCASSERT(!path.empty(), "Invalid filename");
 
     Texture2D *texture = Director::getInstance()->getTextureCache()->addImage(path);
     return initWithFade(fade, minSeg, stroke, color, texture);
+}
+
+bool MotionStreak::initWithFadeAndSpriteFrameName(float fade, float minSeg, float stroke, const Color3B& color, const std::string& spriteFrameName)
+{
+	CCASSERT(!spriteFrameName.empty(), "Invalid spriteFrameName");
+
+	SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(spriteFrameName);
+	CCASSERT(spriteFrame != nullptr, "Failed to get sprite frame");
+
+	_textureRect = spriteFrame->getRect();
+
+	//normalise texture rect
+	auto textureSize = spriteFrame->getTexture()->getContentSize();
+	_textureRect.origin.x /= textureSize.width;
+	_textureRect.origin.y /= textureSize.height;
+	_textureRect.size.width /= textureSize.width;
+	_textureRect.size.height /= textureSize.width;
+
+	return initWithFade(fade, minSeg, stroke, color, spriteFrame->getTexture());
 }
 
 bool MotionStreak::initWithFade(float fade, float minSeg, float stroke, const Color3B& color, Texture2D* texture)
@@ -365,8 +401,9 @@ void MotionStreak::update(float delta)
     if( _nuPoints  && _previousNuPoints != _nuPoints ) {
         float texDelta = 1.0f / _nuPoints;
         for( i=0; i < _nuPoints; i++ ) {
-            _texCoords[i*2] = Tex2F(0, texDelta*i);
-            _texCoords[i*2+1] = Tex2F(1, texDelta*i);
+			float y = _textureRect.getMinY() + (_textureRect.size.height * texDelta*i);
+			_texCoords[i * 2] = Tex2F(_textureRect.getMinX(), y);
+			_texCoords[i * 2 + 1] = Tex2F(_textureRect.getMaxX(), y);
         }
 
         _previousNuPoints = _nuPoints;
