@@ -157,6 +157,8 @@ void TextureCache::addImageAsync(const std::string &path, const std::function<vo
         return;
     }
 
+	CCLOG("async texture load: %s", path.c_str());
+
     // lazy init
     if (_loadingThread == nullptr)
     {
@@ -360,6 +362,7 @@ Texture2D * TextureCache::addImage(const std::string &path)
 
     if (!texture)
     {
+		CCLOG("texture load: %s", path.c_str());
         // all images are handled by UIImage except PVR extension that is handled by our own handler
         do
         {
