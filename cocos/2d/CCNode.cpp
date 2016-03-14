@@ -1242,8 +1242,8 @@ void Node::visit(Renderer* renderer, const Mat4 &parentTransform, uint32_t paren
     // IMPORTANT:
     // To ease the migration to v3.0, we still support the Mat4 stack,
     // but it is deprecated and your code should not rely on it
-    _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
+    //_director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    //_director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
     
     bool visibleByCamera = isVisitableByVisitingCamera();
 
@@ -1263,18 +1263,22 @@ void Node::visit(Renderer* renderer, const Mat4 &parentTransform, uint32_t paren
                 break;
         }
         // self draw
-        if (visibleByCamera)
-            this->draw(renderer, _modelViewTransform, flags);
-
-        for(auto it=_children.cbegin()+i, itCend = _children.cend(); it != itCend; ++it)
-            (*it)->visit(renderer, _modelViewTransform, flags);
+		if (visibleByCamera)
+		{
+			this->draw(renderer, _modelViewTransform, flags);
+		}
+		// draw children zOrder >= 0
+		for (auto size = _children.size(); i < size; ++i)
+		{
+			_children.at(i)->visit(renderer, _modelViewTransform, flags);
+		}
     }
     else if (visibleByCamera)
     {
         this->draw(renderer, _modelViewTransform, flags);
     }
 
-    _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    //_director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     
     // FIX ME: Why need to set _orderOfArrival to 0??
     // Please refer to https://github.com/cocos2d/cocos2d-x/pull/6920
