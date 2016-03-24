@@ -119,11 +119,11 @@ void TransitionScene::draw(Renderer *renderer, const Mat4 &transform, uint32_t f
     Scene::draw(renderer, transform, flags);
 
     if( _isInSceneOnTop ) {
-        _outScene->visit(renderer, transform, flags);
-        _inScene->visit(renderer, transform, flags);
+        _outScene->render(renderer);
+        _inScene->render(renderer);
     } else {
-        _inScene->visit(renderer, transform, flags);
-        _outScene->visit(renderer, transform, flags);
+        _inScene->render(renderer);
+        _outScene->render(renderer);
     }
 }
 
