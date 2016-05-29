@@ -541,6 +541,8 @@ public:
     virtual bool isOpacityModifyRGB() const override;
     /// @}
 
+	virtual bool isInsideBounds() const { return _insideBounds; }
+
     int getResourceType() const { return _fileType; }
     const std::string& getResourceName() const { return _fileName; }
 
