@@ -109,10 +109,10 @@ Rect RectApplyTransform(const Rect& rect, const Mat4& transform)
     transform.transformPoint(&bottomLeft);
     transform.transformPoint(&bottomRight);
 
-    float minX = min(min(topLeft.x, topRight.x), min(bottomLeft.x, bottomRight.x));
-    float maxX = max(max(topLeft.x, topRight.x), max(bottomLeft.x, bottomRight.x));
-    float minY = min(min(topLeft.y, topRight.y), min(bottomLeft.y, bottomRight.y));
-    float maxY = max(max(topLeft.y, topRight.y), max(bottomLeft.y, bottomRight.y));
+	float minX = min({ topLeft.x, topRight.x, bottomLeft.x, bottomRight.x });
+	float maxX = max({ topLeft.x, topRight.x, bottomLeft.x, bottomRight.x });
+	float minY = min({ topLeft.y, topRight.y, bottomLeft.y, bottomRight.y });
+	float maxY = max({ topLeft.y, topRight.y, bottomLeft.y, bottomRight.y });
 
     return Rect(minX, minY, (maxX - minX), (maxY - minY));
 }
