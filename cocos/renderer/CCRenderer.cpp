@@ -889,17 +889,12 @@ void Renderer::flushTriangles()
 
 // helpers
 bool Renderer::checkVisibility(const Mat4 &transform, const Size &size)
-{
-    auto director = Director::getInstance();
-
-    Rect visibleRect(director->getVisibleOrigin(), director->getVisibleSize());
-    
-    auto camera = Camera::getVisitingCamera();
-    
+{     
     Rect rect(Vec2::ZERO, size);
     rect = RectApplyTransform(rect, transform);
-    
-    AABB aabb(Vec3(rect.getMinX(), rect.getMinY(), 0), Vec3(rect.getMaxX(), rect.getMaxY(), 0));
+	AABB aabb(Vec3(rect.getMinX(), rect.getMinY(), 0), Vec3(rect.getMaxX(), rect.getMaxY(), 0));
+
+	auto camera = Camera::getVisitingCamera();
     return camera->isVisibleInFrustum(&aabb);
 }
 
