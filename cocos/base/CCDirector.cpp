@@ -130,6 +130,7 @@ bool Director::init(void)
     _totalFrames = 0;
     _lastUpdate = std::chrono::steady_clock::now();
     _secondsPerFrame = 1.0f;
+    _secondsPerMainLoop = 1.0f;
 
     // paused ?
     _paused = false;
@@ -321,7 +322,12 @@ void Director::drawScene()
     popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 
     _totalFrames++;
-
+    
+    if (_displayStats)
+    {
+        updateMainLoopTimer();
+    }
+    
     // swap buffers
     if (_openGLView)
     {
@@ -330,7 +336,7 @@ void Director::drawScene()
 
     if (_displayStats)
     {
-        calculateMPF();
+        updateFrameTimer();
     }
 }
 
@@ -1237,7 +1243,7 @@ void Director::showStats()
         // to make the FPS stable
         if (_accumDt > CC_DIRECTOR_STATS_INTERVAL)
         {
-            sprintf(buffer, "%.1f / %.3f", _frameRate, _secondsPerFrame);
+            sprintf(buffer, "%.1f / %.3f / %.3f", _frameRate, _secondsPerFrame, _secondsPerMainLoop);
             _FPSLabel->setString(buffer);
             _accumDt = 0;
         }
@@ -1263,7 +1269,20 @@ void Director::showStats()
     }
 }
 
-void Director::calculateMPF()
+void Director::updateMainLoopTimer()
+{
+	static float prevSecondsPerMainLoop = 0;
+	static const float MPF_FILTER = 0.10f;
+
+	auto now = std::chrono::steady_clock::now();
+
+	_secondsPerMainLoop = std::chrono::duration_cast<std::chrono::microseconds>(now - _lastUpdate).count() / 1000000.0f;
+
+	_secondsPerMainLoop = _secondsPerMainLoop * MPF_FILTER + (1 - MPF_FILTER) * prevSecondsPerMainLoop;
+	prevSecondsPerMainLoop = _secondsPerMainLoop;
+}
+
+void Director::updateFrameTimer()
 {
     static float prevSecondsPerFrame = 0;
     static const float MPF_FILTER = 0.10f;

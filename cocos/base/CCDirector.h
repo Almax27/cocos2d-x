@@ -578,7 +578,8 @@ protected:
     
     void showStats();
     void createStatsLabel();
-    void calculateMPF();
+    void updateFrameTimer();
+    void updateMainLoopTimer();
     void getFPSImageData(unsigned char** datapointer, ssize_t* length);
     
     /** calculates delta time since last time it was called */    
@@ -643,6 +644,7 @@ protected:
     /* How many frames were called since the director started */
     unsigned int _totalFrames;
     float _secondsPerFrame;
+    float _secondsPerMainLoop;
     
     /* The running scene */
     Scene *_runningScene;
