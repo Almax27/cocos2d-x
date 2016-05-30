@@ -27,6 +27,7 @@
 
 #include "base/ccMacros.h"
 #include "math/CCMath.h"
+#include "math/CCGeometry.h"
 #include "3d/CCAABB.h"
 #include "3d/CCOBB.h"
 #include "3d/CCPlane.h"
@@ -56,6 +57,10 @@ public:
      */
     bool initFrustum(const Camera* camera);
 
+    /**
+     * is aabb out of frustum.
+     */
+    bool isOutOfFrustum(const Rect& rect) const;
     /**
      * is aabb out of frustum.
      */

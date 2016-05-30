@@ -33,6 +33,32 @@ bool Frustum::initFrustum(const Camera* camera)
     createPlane(camera);
     return true;
 }
+
+bool Frustum::isOutOfFrustum(const Rect& rect) const
+{
+    if (_initialized)
+    {
+        Vec3 point;
+        float minX = rect.origin.x;
+        float maxX = rect.origin.x + rect.size.width;
+        float minY = rect.origin.y;
+        float maxY = rect.origin.y + rect.size.height;
+        
+        int plane = 4; //don't clip z for rect
+        for (int i = 0; i < plane; i++)
+        {
+            const Vec3& normal = _plane[i].getNormal();
+            point.x = normal.x < 0 ? maxX : minX;
+            point.y = normal.y < 0 ? maxY : minY;
+            
+            if (_plane[i].getSide(point) == PointSide::FRONT_PLANE )
+                return true;
+        }
+    }
+    return false;
+}
+
+
 bool Frustum::isOutOfFrustum(const AABB& aabb) const
 {
     if (_initialized)

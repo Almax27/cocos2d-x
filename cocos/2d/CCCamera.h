@@ -202,6 +202,11 @@ public:
     void unprojectGL(const Size& size, const Vec3* src, Vec3* dst) const;
 
     /**
+     * Is this rect visible in frustum
+     */
+    bool isVisibleInFrustum(const Rect* Rect) const;
+    
+    /**
      * Is this aabb visible in frustum
      */
     bool isVisibleInFrustum(const AABB* aabb) const;

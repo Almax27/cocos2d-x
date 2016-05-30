@@ -892,10 +892,9 @@ bool Renderer::checkVisibility(const Mat4 &transform, const Size &size)
 {     
     Rect rect(Vec2::ZERO, size);
     rect = RectApplyTransform(rect, transform);
-	AABB aabb(Vec3(rect.getMinX(), rect.getMinY(), 0), Vec3(rect.getMaxX(), rect.getMaxY(), 0));
 
 	auto camera = Camera::getVisitingCamera();
-    return camera->isVisibleInFrustum(&aabb);
+    return camera->isVisibleInFrustum(&rect);
 }
 
 

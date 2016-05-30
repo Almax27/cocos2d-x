@@ -341,6 +341,16 @@ void Camera::unprojectGL(const Size& viewport, const Vec3* src, Vec3* dst) const
     dst->set(screen.x, screen.y, screen.z);
 }
 
+bool Camera::isVisibleInFrustum(const Rect* rect) const
+{
+    if (_frustumDirty)
+    {
+        _frustum.initFrustum(this);
+        _frustumDirty = false;
+    }
+    return !_frustum.isOutOfFrustum(*rect);
+}
+
 bool Camera::isVisibleInFrustum(const AABB* aabb) const
 {
     if (_frustumDirty)

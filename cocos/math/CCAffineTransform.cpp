@@ -95,10 +95,10 @@ Rect RectApplyAffineTransform(const Rect& rect, const AffineTransform& anAffineT
 
 Rect RectApplyTransform(const Rect& rect, const Mat4& transform)
 {
-    float top    = rect.getMinY();
-    float left   = rect.getMinX();
-    float right  = rect.getMaxX();
-    float bottom = rect.getMaxY();
+    float top    = rect.origin.y;
+    float left   = rect.origin.x;
+    float right  = rect.origin.x + rect.size.width;
+    float bottom = rect.origin.y + rect.size.height;
     
     Vec3 topLeft(left, top, 0);
     Vec3 topRight(right, top, 0);
