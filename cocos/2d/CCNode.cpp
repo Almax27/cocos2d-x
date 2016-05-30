@@ -303,7 +303,8 @@ void Node::setRotation(float rotation)
     _rotationZ_X = _rotationZ_Y = rotation;
     _transformUpdated = _transformDirty = _inverseDirty = true;
     
-    updateRotationQuat();
+    //Note: removed to optimise, as we don't use PU
+    //updateRotationQuat();
 }
 
 float Node::getRotationSkewX() const
@@ -326,7 +327,8 @@ void Node::setRotation3D(const Vec3& rotation)
     // rotation Z is decomposed in 2 to simulate Skew for Flash animations
     _rotationZ_Y = _rotationZ_X = rotation.z;
     
-    updateRotationQuat();
+    //Note: removed to optimise, as we don't use PU
+    //updateRotationQuat();
 }
 
 Vec3 Node::getRotation3D() const
@@ -374,6 +376,7 @@ void Node::setRotationQuat(const Quaternion& quat)
 
 Quaternion Node::getRotationQuat() const
 {
+    CCASSERT(false, "Removed Node::getRotationQuat support to optimise Node::setRotation(float)");
     return _rotationQuat;
 }
 
@@ -1704,7 +1707,8 @@ const Mat4& Node::getNodeToParentTransform() const
         //move to anchor point first, then rotate
         Mat4::createTranslation(x, y, z, &translation);
         
-        Mat4::createRotation(_rotationQuat, &_transform);
+        Mat4::createRotationZ(-CC_DEGREES_TO_RADIANS(_rotationZ_X), &_transform);
+        //Mat4::createRotation(_rotationQuat, &_transform);
         
         if (_rotationZ_X != _rotationZ_Y)
         {
