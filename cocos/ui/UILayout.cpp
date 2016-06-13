@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "renderer/CCGLProgramCache.h"
 #include "renderer/ccGLStateCache.h"
 #include "renderer/CCRenderState.h"
+#include "2d/CCCamera.h"
 #include "base/CCDirector.h"
 #include "2d/CCDrawingPrimitives.h"
 #include "renderer/CCRenderer.h"
@@ -69,7 +70,7 @@ _alongVector(Vec2(0.0f, -1.0f)),
 _cOpacity(255),
 _clippingEnabled(false),
 _layoutType(Type::ABSOLUTE),
-_clippingType(ClippingType::STENCIL),
+_clippingType(ClippingType::SCISSOR),
 _clippingStencil(nullptr),
 _clippingRect(Rect::ZERO),
 _clippingParent(nullptr),
@@ -375,7 +376,10 @@ void Layout::onAfterVisitScissor()
     
 void Layout::scissorClippingVisit(Renderer *renderer, const Mat4& parentTransform, uint32_t parentFlags)
 {
-    if (parentFlags & FLAGS_DIRTY_MASK)
+	uint32_t flags = processParentFlags(parentTransform, parentFlags);
+
+	auto visitingCamera = Camera::getVisitingCamera();
+    if (flags & FLAGS_DIRTY_MASK || (visitingCamera && visitingCamera->isViewProjectionUpdated()))
     {
         _clippingRectDirty = true;
     }
@@ -383,7 +387,8 @@ void Layout::scissorClippingVisit(Renderer *renderer, const Mat4& parentTransfor
     _beforeVisitCmdScissor.func = CC_CALLBACK_0(Layout::onBeforeVisitScissor, this);
     renderer->addCommand(&_beforeVisitCmdScissor);
 
-    ProtectedNode::visit(renderer, parentTransform, parentFlags);
+	//pass the local flags, they won't retrigger this frame as we called processParentFlags()
+    Widget::visit(renderer, parentTransform, flags);
     
     _afterVisitCmdScissor.init(_globalZOrder);
     _afterVisitCmdScissor.func = CC_CALLBACK_0(Layout::onAfterVisitScissor, this);
@@ -460,12 +465,15 @@ void Layout::setStencilClippingSize(const Size& /*size*/)
     
 const Rect& Layout::getClippingRect() 
 {
-    if (_clippingRectDirty)
+	auto visitingCamera = Camera::getVisitingCamera();
+    if (_clippingRectDirty || (visitingCamera && visitingCamera->isViewProjectionUpdated()))
     {
-        Vec2 worldPos = convertToWorldSpace(Vec2::ZERO);
+		float cameraScale = visitingCamera->getScale();
+		Vec2 worldPos = convertToWorldSpaceAR(Vec2::ZERO);
+		worldPos = visitingCamera->convertToNodeSpace(worldPos);
         AffineTransform t = getNodeToWorldAffineTransform();
-        float scissorWidth = _contentSize.width*t.a;
-        float scissorHeight = _contentSize.height*t.d;
+        float scissorWidth = _contentSize.width*t.a / cameraScale;
+        float scissorHeight = _contentSize.height*t.d / cameraScale;
         Rect parentClippingRect;
         Layout* parent = this;
 
@@ -532,6 +540,7 @@ const Rect& Layout::getClippingRect()
             _clippingRect.size.width = scissorWidth;
             _clippingRect.size.height = scissorHeight;
         }
+
         _clippingRectDirty = false;
     }
     return _clippingRect;
