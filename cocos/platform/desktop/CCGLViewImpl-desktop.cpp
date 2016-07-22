@@ -485,6 +485,8 @@ bool GLViewImpl::isOpenGLReady()
 
 void GLViewImpl::end()
 {
+	Application::getInstance()->applicationDidEnterBackground();
+
     if(_mainWindow)
     {
         glfwSetWindowShouldClose(_mainWindow,1);
