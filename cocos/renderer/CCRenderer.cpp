@@ -894,9 +894,15 @@ bool Renderer::checkVisibility(const Mat4 &transform, const Size &size)
     rect = RectApplyTransform(rect, transform);
 
 	auto camera = Camera::getVisitingCamera();
-    return camera->isVisibleInFrustum(&rect);
+	if (camera)
+	{
+		return camera->isVisibleInFrustum(&rect);
+	}
+	else
+	{
+		return true;
+	}
 }
-
 
 void Renderer::setClearColor(const Color4F &clearColor)
 {
