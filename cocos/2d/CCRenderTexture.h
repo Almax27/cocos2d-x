@@ -322,6 +322,7 @@ protected:
     GLuint       _depthRenderBuffer;
     GLuint       _stencilRenderBuffer;
     GLint        _oldFBO;
+	GLboolean	 _scissorOldState;
     Texture2D* _texture;
     Texture2D* _textureCopy;    // a copy of _texture
     Image*     _UITextureImage;

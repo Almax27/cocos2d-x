@@ -646,6 +646,13 @@ void RenderTexture::onBegin()
         glViewport(viewport.origin.x, viewport.origin.y, (GLsizei)viewport.size.width, (GLsizei)viewport.size.height);
     }
 
+	//disable scissor
+	_scissorOldState = glIsEnabled(GL_SCISSOR_TEST);
+	if (GL_TRUE == _scissorOldState)
+	{
+		glDisable(GL_SCISSOR_TEST);
+	}
+
     // Adjust the orthographic projection and viewport
     
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_oldFBO);
@@ -678,6 +685,11 @@ void RenderTexture::onEnd()
     director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, _oldProjMatrix);
     director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _oldTransMatrix);
 
+	//restore scissor
+	if (GL_TRUE == _scissorOldState)
+	{
+		glEnable(GL_SCISSOR_TEST);
+	}
 }
 
 void RenderTexture::onClear()
