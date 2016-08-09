@@ -257,11 +257,14 @@ bool GLProgram::initWithByteArrays(const GLchar* vShaderByteArray, const GLchar*
     // a cache for the defines could be useful, but seems like overkill at this point
     std::string replacedDefines = "";
     replaceDefines(compileTimeDefines, replacedDefines);
+    _compileTimeDefines = compileTimeDefines;
+    _compileTimeHeaders = compileTimeHeaders;
 
     _vertShader = _fragShader = 0;
 
     if (vShaderByteArray)
     {
+        _vertexSource = vShaderByteArray;
         if (!compileShader(&_vertShader, GL_VERTEX_SHADER, vShaderByteArray, compileTimeHeaders, replacedDefines))
         {
             CCLOG("cocos2d: ERROR: Failed to compile vertex shader");
@@ -272,6 +275,7 @@ bool GLProgram::initWithByteArrays(const GLchar* vShaderByteArray, const GLchar*
     // Create and compile fragment shader
     if (fShaderByteArray)
     {
+        _fragmentSource = fShaderByteArray;
         if (!compileShader(&_fragShader, GL_FRAGMENT_SHADER, fShaderByteArray, compileTimeHeaders, replacedDefines))
         {
             CCLOG("cocos2d: ERROR: Failed to compile fragment shader");
@@ -987,12 +991,14 @@ void GLProgram::reset()
     _vertShader = _fragShader = 0;
     memset(_builtInUniforms, 0, sizeof(_builtInUniforms));
 
-
     // it is already deallocated by android
     //GL::deleteProgram(_program);
     _program = 0;
 
     clearHashUniforms();
+
+	//rebuild
+    initWithByteArrays(_vertexSource.c_str(), _fragmentSource.c_str(), _compileTimeHeaders, _compileTimeDefines);
 }
 
 inline void GLProgram::clearShader()

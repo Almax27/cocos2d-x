@@ -587,6 +587,15 @@ protected:
 
     /*needed uniforms*/
     UniformFlags _flags;
+
+    /*Cache for fragment shader source*/
+    std::string _vertexSource;
+    /*Cache for fragment shader source*/
+    std::string _fragmentSource;
+    /*Cache for compile time defines*/
+    std::string _compileTimeHeaders;
+    /*Cache for compile time defines*/
+    std::string _compileTimeDefines;
 };
 
 NS_CC_END

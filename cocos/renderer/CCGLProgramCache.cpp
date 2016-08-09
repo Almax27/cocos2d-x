@@ -231,6 +231,8 @@ void GLProgramCache::loadDefaultGLPrograms()
     loadDefaultGLProgram(p, kShaderType_LabelOutline);
     _programs.emplace(GLProgram::SHADER_NAME_LABEL_OUTLINE, p);
 
+    /* Currently unused by Dust
+
     p = new (std::nothrow) GLProgram();
     loadDefaultGLProgram(p, kShaderType_3DPosition);
     _programs.emplace(GLProgram::SHADER_3D_POSITION, p);
@@ -278,6 +280,8 @@ void GLProgramCache::loadDefaultGLPrograms()
     p = new (std::nothrow) GLProgram();
     loadDefaultGLProgram(p, kShaderType_3DTerrain);
     _programs.emplace(GLProgram::SHADER_3D_TERRAIN, p);
+
+    */
     
     p = new (std::nothrow) GLProgram();
     loadDefaultGLProgram(p, kShaderType_CameraClear);
@@ -304,192 +308,17 @@ void GLProgramCache::loadDefaultGLPrograms()
 
 void GLProgramCache::reloadDefaultGLPrograms()
 {
-    // reset all programs and reload them
-
-    // Position Texture Color shader
-    GLProgram *p = getGLProgram(GLProgram::SHADER_NAME_POSITION_TEXTURE_COLOR);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_PositionTextureColor);
-
-    // Position Texture Color without MVP shader
-    p = getGLProgram(GLProgram::SHADER_NAME_POSITION_TEXTURE_COLOR_NO_MVP);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_PositionTextureColor_noMVP);
-
-    // Position Texture Color alpha test
-    p = getGLProgram(GLProgram::SHADER_NAME_POSITION_TEXTURE_ALPHA_TEST);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_PositionTextureColorAlphaTest);
-
-    // Position Texture Color alpha test
-    p = getGLProgram(GLProgram::SHADER_NAME_POSITION_TEXTURE_ALPHA_TEST_NO_MV);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_PositionTextureColorAlphaTestNoMV);
-    //
-    // Position, Color shader
-    //
-    p = getGLProgram(GLProgram::SHADER_NAME_POSITION_COLOR);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_PositionColor);
-
-    // Position, Color, PointSize shader
-    p = getGLProgram(GLProgram::SHADER_NAME_POSITION_COLOR_TEXASPOINTSIZE);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_PositionColorTextureAsPointsize);
-
-    //
-    // Position, Color shader no MVP
-    //
-    p = getGLProgram(GLProgram::SHADER_NAME_POSITION_COLOR_NO_MVP);
-    loadDefaultGLProgram(p, kShaderType_PositionColor_noMVP);
-
-    //
-    // Position Texture shader
-    //
-    p = getGLProgram(GLProgram::SHADER_NAME_POSITION_TEXTURE);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_PositionTexture);
-
-    //
-    // Position, Texture attribs, 1 Color as uniform shader
-    //
-    p = getGLProgram(GLProgram::SHADER_NAME_POSITION_TEXTURE_U_COLOR);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_PositionTexture_uColor);
-
-    //
-    // Position Texture A8 Color shader
-    //
-    p = getGLProgram(GLProgram::SHADER_NAME_POSITION_TEXTURE_A8_COLOR);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_PositionTextureA8Color);
-
-    //
-    // Position and 1 color passed as a uniform (to simulate glColor4ub )
-    //
-    p = getGLProgram(GLProgram::SHADER_NAME_POSITION_U_COLOR);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_Position_uColor);
-
-    //
-    // Position, Length(TexCoords, Color (used by Draw Node basically )
-    //
-    p = getGLProgram(GLProgram::SHADER_NAME_POSITION_LENGTH_TEXTURE_COLOR);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_PositionLengthTextureColor);
-
-    p = getGLProgram(GLProgram::SHADER_NAME_LABEL_DISTANCEFIELD_NORMAL);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_LabelDistanceFieldNormal);
-
-    p = getGLProgram(GLProgram::SHADER_NAME_LABEL_DISTANCEFIELD_GLOW);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_LabelDistanceFieldGlow);
-
-    p = getGLProgram(GLProgram::SHADER_NAME_POSITION_GRAYSCALE);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_UIGrayScale);
-
-    p = getGLProgram(GLProgram::SHADER_NAME_LABEL_NORMAL);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_LabelNormal);
-
-    p = getGLProgram(GLProgram::SHADER_NAME_LABEL_OUTLINE);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_LabelOutline);
-
-    p = getGLProgram(GLProgram::SHADER_3D_POSITION);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_3DPosition);
-
-    p = getGLProgram(GLProgram::SHADER_3D_POSITION_TEXTURE);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_3DPositionTex);
-
-    p = getGLProgram(GLProgram::SHADER_3D_SKINPOSITION_TEXTURE);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_3DSkinPositionTex);
-
-    p = getGLProgram(GLProgram::SHADER_3D_POSITION_NORMAL);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_3DPositionNormal);
-
-    p = getGLProgram(GLProgram::SHADER_3D_POSITION_NORMAL_TEXTURE);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_3DPositionNormalTex);
-
-    p = getGLProgram(GLProgram::SHADER_3D_SKINPOSITION_NORMAL_TEXTURE);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_3DSkinPositionNormalTex);
-
-    p = getGLProgram(GLProgram::SHADER_3D_POSITION_BUMPEDNORMAL_TEXTURE);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_3DPositionBumpedNormalTex);
-
-    p = getGLProgram(GLProgram::SHADER_3D_SKINPOSITION_BUMPEDNORMAL_TEXTURE);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_3DSkinPositionBumpedNormalTex);
-
-    p = getGLProgram(GLProgram::SHADER_3D_PARTICLE_TEXTURE);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_3DParticleTex);
-
-    p = getGLProgram(GLProgram::SHADER_3D_PARTICLE_COLOR);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_3DParticleColor);
-
-    p = getGLProgram(GLProgram::SHADER_3D_SKYBOX);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_3DSkyBox);
-
-    p = getGLProgram(GLProgram::SHADER_3D_TERRAIN);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_3DTerrain);
-    
-    p = getGLProgram(GLProgram::SHADER_CAMERA_CLEAR);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_CameraClear);
-
-    // ETC1 ALPHA supports.
-    p = getGLProgram(GLProgram::SHADER_NAME_ETC1AS_POSITION_TEXTURE_COLOR);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_ETC1ASPositionTextureColor);
-
-    p = getGLProgram(GLProgram::SHADER_NAME_ETC1AS_POSITION_TEXTURE_COLOR_NO_MVP);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_ETC1ASPositionTextureColor_noMVP);
-
-    // ETC1 Gray supports.
-    p = getGLProgram(GLProgram::SHADER_NAME_ETC1AS_POSITION_TEXTURE_GRAY);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_ETC1ASPositionTextureGray);
-
-    p = getGLProgram(GLProgram::SHADER_NAME_ETC1AS_POSITION_TEXTURE_GRAY_NO_MVP);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_ETC1ASPositionTextureGray_noMVP);
+	for (auto& pair : _programs)
+	{
+		pair.second->reset();
+		pair.second->link();
+		pair.second->updateUniforms();
+	}
 }
 
 void GLProgramCache::reloadDefaultGLProgramsRelativeToLights()
 {
-    GLProgram *p = getGLProgram(GLProgram::SHADER_3D_POSITION_NORMAL);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_3DPositionNormal);
     
-    p = getGLProgram(GLProgram::SHADER_3D_POSITION_NORMAL_TEXTURE);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_3DPositionNormalTex);
-    
-    p = getGLProgram(GLProgram::SHADER_3D_SKINPOSITION_NORMAL_TEXTURE);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_3DSkinPositionNormalTex);
-
-    p = getGLProgram(GLProgram::SHADER_3D_POSITION_BUMPEDNORMAL_TEXTURE);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_3DPositionBumpedNormalTex);
-
-    p = getGLProgram(GLProgram::SHADER_3D_SKINPOSITION_BUMPEDNORMAL_TEXTURE);
-    p->reset();
-    loadDefaultGLProgram(p, kShaderType_3DSkinPositionBumpedNormalTex);
 }
 
 void GLProgramCache::loadDefaultGLProgram(GLProgram *p, int type)
