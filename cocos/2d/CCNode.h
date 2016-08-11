@@ -457,6 +457,18 @@ public:
     virtual float getPositionZ() const;
     CC_DEPRECATED_ATTRIBUTE virtual float getVertexZ() const { return getPositionZ(); }
 
+	/**
+	* Sets whether the node uses interger positions
+	* @param intPos if true then interger position will be used
+	*/
+	virtual void setIntegerPosition(bool intPos);
+
+	/**
+	* Gets whether the node uses interger positions
+	* @return true if interger position will be used
+	*/
+	virtual bool getIntegerPosition() const;
+
     /**
      * Changes the X skew angle of the node in degrees.
      *
@@ -1913,6 +1925,7 @@ protected:
     Vec2 _normalizedPosition;
     bool _usingNormalizedPosition;
     bool _normalizedPositionDirty;
+	bool _usingIntergerPosition;
 
     float _skewX;                   ///< skew angle on x-axis
     float _skewY;                   ///< skew angle on y-axis

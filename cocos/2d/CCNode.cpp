@@ -71,6 +71,7 @@ Node::Node()
 , _positionZ(0.0f)
 , _usingNormalizedPosition(false)
 , _normalizedPositionDirty(false)
+, _usingIntergerPosition(false)
 , _skewX(0.0f)
 , _skewY(0.0f)
 , _contentSize(Size::ZERO)
@@ -576,6 +577,16 @@ void Node::setPositionNormalized(const Vec2& position)
     _usingNormalizedPosition = true;
     _normalizedPositionDirty = true;
     _transformUpdated = _transformDirty = _inverseDirty = true;
+}
+
+void Node::setIntegerPosition(bool intPos)
+{
+	_usingIntergerPosition = intPos;
+}
+
+bool Node::getIntegerPosition() const
+{
+	return _usingIntergerPosition;
 }
 
 ssize_t Node::getChildrenCount() const
@@ -1216,8 +1227,10 @@ uint32_t Node::processParentFlags(const Mat4& parentTransform, uint32_t parentFl
     flags |= (_contentSizeDirty ? FLAGS_CONTENT_SIZE_DIRTY : 0);
     
 
-    if(flags & FLAGS_DIRTY_MASK)
-        _modelViewTransform = this->transform(parentTransform);
+	if (flags & FLAGS_DIRTY_MASK)
+	{
+		_modelViewTransform = this->transform(parentTransform);
+	}
     
     _transformUpdated = false;
     _contentSizeDirty = false;
@@ -1241,6 +1254,13 @@ void Node::visit(Renderer* renderer, const Mat4 &parentTransform, uint32_t paren
     }
 
     uint32_t flags = processParentFlags(parentTransform, parentFlags);
+
+	if (_usingIntergerPosition)
+	{
+		_modelViewTransform.m[13] = floor(_modelViewTransform.m[13]);
+		_modelViewTransform.m[14] = floor(_modelViewTransform.m[14]);
+		_modelViewTransform.m[15] = floor(_modelViewTransform.m[15]);
+	}
 
     // IMPORTANT:
     // To ease the migration to v3.0, we still support the Mat4 stack,
