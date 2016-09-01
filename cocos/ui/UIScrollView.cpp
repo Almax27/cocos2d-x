@@ -166,26 +166,7 @@ void ScrollView::onSizeChanged()
 
 void ScrollView::setInnerContainerSize(const Size &size)
 {
-    float innerSizeWidth = _contentSize.width;
-    float innerSizeHeight = _contentSize.height;
-    Size originalInnerSize = _innerContainer->getContentSize();
-    if (size.width < _contentSize.width)
-    {
-        CCLOG("Inner width <= scrollview width, it will be force sized!");
-    }
-    else
-    {
-        innerSizeWidth = size.width;
-    }
-    if (size.height < _contentSize.height)
-    {
-        CCLOG("Inner height <= scrollview height, it will be force sized!");
-    }
-    else
-    {
-        innerSizeHeight = size.height;
-    }
-    _innerContainer->setContentSize(Size(innerSizeWidth, innerSizeHeight));
+    _innerContainer->setContentSize(size);
 
     // Calculate and set the position of the inner container.
     Vec2 pos = _innerContainer->getPosition();
@@ -445,7 +426,7 @@ void ScrollView::startAutoScrollToDestination(const Vec2& destination, float tim
 static float calculateAutoScrollTimeByInitialSpeed(float initialSpeed)
 {
     // Calculate the time from the initial speed according to quintic polynomial.
-    float time = sqrtf(sqrtf(initialSpeed / 5));
+    float time = sqrtf(sqrtf(initialSpeed / 2000));
     return time;
 }
 
@@ -540,7 +521,7 @@ void ScrollView::processAutoScrolling(float deltaTime)
     if(_autoScrollAttenuate)
     {
         // Use quintic(5th degree) polynomial
-        percentage = tweenfunc::quintEaseOut(percentage);
+        percentage = tweenfunc::quadEaseOut(percentage);
     }
     
     // Calculate the new position
@@ -569,14 +550,14 @@ void ScrollView::processAutoScrolling(float deltaTime)
         }
     }
 
-    // Finish auto scroll if it ended
-    if(reachedEnd)
-    {
-        _autoScrolling = false;
-        dispatchEvent(SCROLLVIEW_EVENT_AUTOSCROLL_ENDED, EventType::AUTOSCROLL_ENDED);
-    }
-
     moveInnerContainer(newPosition - getInnerContainerPosition(), reachedEnd);
+
+	// Finish auto scroll if it ended
+	if (reachedEnd)
+	{
+		_autoScrolling = false;
+		dispatchEvent(SCROLLVIEW_EVENT_AUTOSCROLL_ENDED, EventType::AUTOSCROLL_ENDED);
+	}
 }
 
 void ScrollView::jumpToDestination(const Vec2 &des)
