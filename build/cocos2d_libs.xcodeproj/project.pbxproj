@@ -17688,6 +17688,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				EXECUTABLE_EXTENSION = a;
 				EXECUTABLE_PREFIX = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -17698,6 +17700,7 @@
 					CC_KEYBOARD_SUPPORT,
 					_USRDLL,
 				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = "";
 				LD_DYLIB_INSTALL_NAME = "";
 				LIBRARY_SEARCH_PATHS = (
@@ -17716,6 +17719,7 @@
 				);
 				MACH_O_TYPE = staticlib;
 				OTHER_LDFLAGS = "-llibsql3";
+				STRIP_STYLE = all;
 				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../external/png/include/mac $(SRCROOT)/../external/tiff/include/mac $(SRCROOT)/../external/webp/include/mac $(SRCROOT)/../external/jpeg/include/mac $(SRCROOT)/../external/freetype2/include/mac $(SRCROOT)/../external/glfw3/include/mac $(SRCROOT)/../external/websockets/include/mac $(SRCROOT)/../external/curl/include/mac $(SRCROOT)/../external/freetype2/include/mac/freetype2 $(SRCROOT)/../external/openssl/include/mac";
 			};
 			name = Debug;
@@ -17725,9 +17729,11 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				EXECUTABLE_EXTENSION = a;
 				EXECUTABLE_PREFIX = "";
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "../cocos/platform/mac/cocos2d-prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -17736,6 +17742,7 @@
 					CC_TARGET_OS_MAC,
 					_USRDLL,
 				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = "";
 				LD_DYLIB_INSTALL_NAME = "";
 				LIBRARY_SEARCH_PATHS = (
@@ -17754,6 +17761,7 @@
 				);
 				MACH_O_TYPE = staticlib;
 				OTHER_LDFLAGS = "-llibsql3";
+				STRIP_STYLE = all;
 				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../external/png/include/mac $(SRCROOT)/../external/tiff/include/mac $(SRCROOT)/../external/webp/include/mac $(SRCROOT)/../external/jpeg/include/mac $(SRCROOT)/../external/freetype2/include/mac $(SRCROOT)/../external/glfw3/include/mac $(SRCROOT)/../external/websockets/include/mac $(SRCROOT)/../external/curl/include/mac $(SRCROOT)/../external/freetype2/include/mac/freetype2 $(SRCROOT)/../external/openssl/include/mac";
 			};
 			name = Release;
