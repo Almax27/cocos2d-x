@@ -77,6 +77,7 @@ CC_DLL Rect RectApplyAffineTransform(const Rect& rect, const AffineTransform& an
  Transform vec2 and Rect by Mat4.
  */
 CC_DLL Rect RectApplyTransform(const Rect& rect, const Mat4& transform);
+CC_DLL void RectApplyTransform(const Rect& rect, const Mat4& transform, Rect& out);
 CC_DLL Vec2 PointApplyTransform(const Vec2& point, const Mat4& transform);
 /**@}*/
 /**

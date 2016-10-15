@@ -1223,9 +1223,8 @@ uint32_t Node::processParentFlags(const Mat4& parentTransform, uint32_t parentFl
         return parentFlags;
 
     uint32_t flags = parentFlags;
-    flags |= (_transformUpdated ? FLAGS_TRANSFORM_DIRTY : 0);
-    flags |= (_contentSizeDirty ? FLAGS_CONTENT_SIZE_DIRTY : 0);
-    
+    if(_transformUpdated) flags |= FLAGS_TRANSFORM_DIRTY;
+    if(_contentSizeDirty) flags |= FLAGS_CONTENT_SIZE_DIRTY;
 
 	if (flags & FLAGS_DIRTY_MASK)
 	{
@@ -1254,7 +1253,6 @@ void Node::visit(Renderer* renderer, const Mat4 &parentTransform, uint32_t paren
     }
 
     uint32_t flags = processParentFlags(parentTransform, parentFlags);
-
     
     if (_usingIntergerPosition)
     {
@@ -1280,8 +1278,7 @@ void Node::visit(Renderer* renderer, const Mat4 &parentTransform, uint32_t paren
         for(auto size = _children.size(); i < size; ++i)
         {
             auto node = _children.at(i);
-
-            if (node && node->_localZOrder < 0)
+            if(node->_localZOrder < 0)
                 node->visit(renderer, _modelViewTransform, flags);
             else
                 break;

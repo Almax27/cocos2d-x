@@ -889,13 +889,12 @@ void Renderer::flushTriangles()
 
 // helpers
 bool Renderer::checkVisibility(const Mat4 &transform, const Size &size)
-{     
-    Rect rect(Vec2::ZERO, size);
-    rect = RectApplyTransform(rect, transform);
-
+{
 	auto camera = Camera::getVisitingCamera();
 	if (camera)
 	{
+        Rect rect(Vec2::ZERO, size);
+        RectApplyTransform(rect, transform, rect);
 		return camera->isVisibleInFrustum(&rect);
 	}
 	else

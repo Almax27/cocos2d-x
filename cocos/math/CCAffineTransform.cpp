@@ -93,7 +93,7 @@ Rect RectApplyAffineTransform(const Rect& rect, const AffineTransform& anAffineT
     return Rect(minX, minY, (maxX - minX), (maxY - minY));
 }
 
-Rect RectApplyTransform(const Rect& rect, const Mat4& transform)
+void RectApplyTransform(const Rect& rect, const Mat4& transform, Rect& out)
 {
     float top    = rect.origin.y;
     float left   = rect.origin.x;
@@ -108,15 +108,21 @@ Rect RectApplyTransform(const Rect& rect, const Mat4& transform)
     transform.transformPoint(&topRight);
     transform.transformPoint(&bottomLeft);
     transform.transformPoint(&bottomRight);
-
-	float minX = min({ topLeft.x, topRight.x, bottomLeft.x, bottomRight.x });
-	float maxX = max({ topLeft.x, topRight.x, bottomLeft.x, bottomRight.x });
-	float minY = min({ topLeft.y, topRight.y, bottomLeft.y, bottomRight.y });
-	float maxY = max({ topLeft.y, topRight.y, bottomLeft.y, bottomRight.y });
-
-    return Rect(minX, minY, (maxX - minX), (maxY - minY));
+    
+    float minX = min({ topLeft.x, topRight.x, bottomLeft.x, bottomRight.x });
+    float maxX = max({ topLeft.x, topRight.x, bottomLeft.x, bottomRight.x });
+    float minY = min({ topLeft.y, topRight.y, bottomLeft.y, bottomRight.y });
+    float maxY = max({ topLeft.y, topRight.y, bottomLeft.y, bottomRight.y });
+    
+    out.setRect(minX, minY, (maxX - minX), (maxY - minY));
 }
 
+Rect RectApplyTransform(const Rect& rect, const Mat4& transform)
+{
+    Rect out;
+    RectApplyTransform(rect, transform, out);
+    return out;
+}
 
 AffineTransform AffineTransformTranslate(const AffineTransform& t, float tx, float ty)
 {
