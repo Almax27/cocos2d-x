@@ -1255,12 +1255,13 @@ void Node::visit(Renderer* renderer, const Mat4 &parentTransform, uint32_t paren
 
     uint32_t flags = processParentFlags(parentTransform, parentFlags);
 
-	if (_usingIntergerPosition)
-	{
-		_modelViewTransform.m[13] = floor(_modelViewTransform.m[13]);
-		_modelViewTransform.m[14] = floor(_modelViewTransform.m[14]);
-		_modelViewTransform.m[15] = floor(_modelViewTransform.m[15]);
-	}
+    
+    if (_usingIntergerPosition)
+    {
+        _modelViewTransform.m[13] = floor(_modelViewTransform.m[13]);
+        _modelViewTransform.m[14] = floor(_modelViewTransform.m[14]);
+        _modelViewTransform.m[15] = floor(_modelViewTransform.m[15]);
+    }
 
     // IMPORTANT:
     // To ease the migration to v3.0, we still support the Mat4 stack,
