@@ -1062,8 +1062,13 @@ Size Layout::getLayoutAccumulatedSize()const
             if (w)
             {
                 widgetCount++;
-                Margin m = w->getLayoutParameter()->getMargin();
-                layoutSize = layoutSize + w->getContentSize() + Size(m.right + m.left,  m.top + m.bottom) * 0.5;
+				layoutSize = layoutSize + w->getContentSize();
+				auto layoutParam = w->getLayoutParameter();
+				if (layoutParam)
+				{
+					const auto& m = layoutParam->getMargin();
+					layoutSize = layoutSize + Size(m.right + m.left, m.top + m.bottom) * 0.5;
+				}
             }
         }
     }
