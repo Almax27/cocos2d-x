@@ -634,6 +634,7 @@ void Layout::setBackGroundImage(const std::string& fileName,TextureResType texTy
     else{
         _backGroundImage->setPreferredSize(_backGroundImageTextureSize);
     }
+    setBackGroundImageCapInsets(_backGroundImageCapInsets);
     updateBackGroundImageRGBA();
 }
 
